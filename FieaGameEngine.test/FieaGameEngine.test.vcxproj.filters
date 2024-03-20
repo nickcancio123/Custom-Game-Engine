@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Tests">
+      <UniqueIdentifier>{5cf21b94-c184-410f-bd39-b8b9dfd1dd92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test Classes">
+      <UniqueIdentifier>{99a37df7-8d7a-43f4-a544-faef17ccd0bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test Classes\Headers">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Test Classes\Source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\FieaGameEngine\Empty.cpp">
+      <Filter>Test Classes\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FieaGameEngine\EmptyChild.cpp">
+      <Filter>Test Classes\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FieaGameEngine\Foo.cpp">
+      <Filter>Test Classes\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="AttributedChild.cpp">
+      <Filter>Test Classes\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Attributed.Test.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Datum.Test.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="FieaGameEngine.Test.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="RTTI.Test.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Scope.Test.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\FieaGameEngine\EmptyChild.h">
+      <Filter>Test Classes\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FieaGameEngine\Empty.h">
+      <Filter>Test Classes\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FieaGameEngine\Foo.h">
+      <Filter>Test Classes\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="AttributedChild.h">
+      <Filter>Test Classes\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>
