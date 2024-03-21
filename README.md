@@ -11,7 +11,7 @@ The core data model is constructed by a recursive pair of classes: Scope and Dat
 DATUM is much like std::vector, but rather than evaluating the data type it contains at compile-time, Datum does so at run-time. One of the data types Datum can wrap is a pointer to a Scope.
 
 SCOPE is a class that maps names to Datums. For example, it can map "Health" to a Datum containing a float. 
-A Scope could have a Datum that points another Scope. For example, a Mage (deriving from Scope), could have a Datum that points to a Staff (deriving from Scope), and have it named "Staff".
+A Scope could have a Datum that points to another Scope. For example, a Mage (deriving from Scope), could have a Datum that points to a Staff (deriving from Scope), and have it named "Staff".
 
 In this manner, Scope and Datum form a heirarchical data model.
 
