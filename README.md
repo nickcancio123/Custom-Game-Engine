@@ -1,8 +1,11 @@
 
-This project is a WORK-IN-PROGRESS GRADUATE PROJECT at the Florida Interactive Entertainment Academy (FIEA). It forms the interactive-data portion of a game engine, enabling a game developer to configure the behavior of and data contained by game objects in both C++ and JSON. 
+This project is a WORK-IN-PROGRESS GRADUATE PROJECT at the Florida Interactive Entertainment Academy (FIEA). 
+
+It forms the interactive-data portion of a game engine, enabling a game developer to configure the behavior of and data contained by game objects in both C++ and JSON. 
 
 
-===== TECHNICAL IMPLEMENTATION =====
+=== TECHNICAL IMPLEMENTATION ===
+
 The core data model of this engine is a recursive pair of classes: Scope and Datum. 
 
 DATUM is a homogeneous data wrapper that resolves its type at runtime. Any single datum can wrap one of many supported data types, like integer, float, string, vector4, or a Scope (explained next). Datums can be resized, much like std::vector. So, datum can represent either a single data value or a homogeneous array. Lastly, datum can either own the data it wraps, or wrap a reference to external data.
@@ -15,4 +18,4 @@ PARSECOORDINATOR, with the help of a third-party JSON parsing library, can read 
 
 GAMEOBJECT, is an attributed subclass that has transform information (i.e., position, rotation, and scale), can have children gameobjects, and has a virtual method Update, which it recursively calls on its children. Gameobjects also have a list of actions.
 
-ACTIONS, inheriting from attributed, are modular units of behavior that can be added to or removed from gameobjects to configure their behavior. Actions also have a virtual Update method in which their behavior is defined. Gameobjects call update on their own list of actions, thereby "behaving". 
+ACTIONS, inheriting from attributed, are modular units of behavior that can be added to or removed from gameobjects to configure their behavior. Actions create behavior by operating on the datums on their owner gameobjects. Gameobjects call Update on their own list of actions, thereby "behaving". 
