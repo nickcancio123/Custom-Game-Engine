@@ -1,17 +1,18 @@
 
-This project is still a WORK-IN-PROGRESS.
-
-Created as a semester-long programming GRADUATE PROJECT at the Florida Interactive Entertainment Academy (FIEA).
-
-The objective of this project was to create a system for C++ CODE REFLECTION into another language, JSON, so that a game built with this engine could use JSON as a scripting language.
+This project is a WORK-IN-PROGRESS GRADUATE PROJECT at the Florida Interactive Entertainment Academy (FIEA). It forms the interactive-data portion of a game engine, enabling a game developer to configure the behavior of and data contained by game objects in both C++ and JSON. 
 
 
-The core data model is constructed by a recursive pair of classes: Scope and Datum. 
+===== TECHNICAL IMPLEMENTATION =====
+The core data model of this engine is a recursive pair of classes: Scope and Datum. 
 
-DATUM is much like std::vector, but rather than evaluating the data type it contains at compile-time, Datum does so at run-time. One of the data types Datum can wrap is a pointer to a Scope.
+DATUM is a homogeneous data wrapper that resolves its type at runtime. Any single datum can wrap one of many supported data types, like integer, float, string, vector4, or a Scope (explained next). Datums can be resized, much like std::vector. So, datum can represent either a single data value or a homogeneous array. Lastly, datum can either own the data it wraps, or wrap a reference to external data.
 
-SCOPE is a class that maps names to Datums. For example, it can map "Health" to a Datum containing a float. 
-A Scope could have a Datum that points to another Scope. For example, a Mage (deriving from Scope), could have a Datum that points to a Staff (deriving from Scope), and have it named "Staff".
+SCOPE is a class that HAS datums, which it maps names to. For example, it can map "Health" to a Datum containing a float. Quickly, you can imagine that a scope can be configured to represent another class by having a set of named variables. 
 
-In this manner, Scope and Datum form a heirarchical data model.
+ATTRIBUTED does just that. Attributed is an abstract subclass of scope that enables subclasses of itself to create named datums that wrap their C++ member variables. For example, a class Monster, could map the name "Health" to a datum that wraps Monster's "_health" C++ member variable. With this system, changes to the C++ "_health" variable would be reflected in the "Health" datum, and vice versa, because the two are bound. 
 
+PARSECOORDINATOR, with the help of a third-party JSON parsing library, can read through JSON files that define objects with variables with initial values, and convert them to scope instances or attributed subclass instances.
+
+GAMEOBJECT, is an attributed subclass that has transform information (i.e., position, rotation, and scale), can have children gameobjects, and has a virtual method Update, which it recursively calls on its children. Gameobjects also have a list of actions.
+
+ACTIONS, inheriting from attributed, are modular units of behavior that can be added to or removed from gameobjects to configure their behavior. Actions also have a virtual Update method in which their behavior is defined. Gameobjects call update on their own list of actions, thereby "behaving". 
