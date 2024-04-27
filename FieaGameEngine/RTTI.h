@@ -35,7 +35,7 @@ namespace Fiea::GameEngine
 	public:																													\
 		static std::string TypeName() { return std::string(#Type); }														\
 		static Fiea::GameEngine::RTTI::IdType TypeIdClass() { return _typeId; }												\
-		virtual Fiea::GameEngine::RTTI::IdType TypeIdInstance() const override { return TypeIdClass(); }					\
+		Fiea::GameEngine::RTTI::IdType TypeIdInstance() const override { return TypeIdClass(); }								\
 		bool Is(Fiea::GameEngine::RTTI::IdType id) const override { return (id == _typeId ? true : ParentType::Is(id)); }		\
 	private:																												\
 		static const Fiea::GameEngine::RTTI::IdType _typeId

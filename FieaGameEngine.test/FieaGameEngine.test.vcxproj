@@ -77,27 +77,27 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)lib\</OutDir>
+    <OutDir>$(SolutionDir)lib\$(Platform)-$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)$(Platform)-$(Configuration)</TargetName>
+    <TargetName>$(ProjectName)$</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)lib\</OutDir>
+    <OutDir>$(SolutionDir)lib\$(Platform)-$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)$(Platform)-$(Configuration)</TargetName>
+    <TargetName>$(ProjectName)$</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)lib\</OutDir>
+    <OutDir>$(SolutionDir)lib\$(Platform)-$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)$(Platform)-$(Configuration)</TargetName>
+    <TargetName>$(ProjectName)$</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)lib\</OutDir>
+    <OutDir>$(SolutionDir)lib\$(Platform)-$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)$(Platform)-$(Configuration)</TargetName>
+    <TargetName>$(ProjectName)$</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -180,13 +180,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\FieaGameEngine\Empty.cpp" />
-    <ClCompile Include="..\FieaGameEngine\EmptyChild.cpp" />
-    <ClCompile Include="..\FieaGameEngine\Foo.cpp" />
+    <ClCompile Include="..\FieaGameEngine\IntTestHandler.cpp" />
+    <ClCompile Include="..\FieaGameEngine\TestParseHandler.cpp" />
+    <ClCompile Include="Actions.Test.cpp" />
     <ClCompile Include="Attributed.Test.cpp" />
+    <ClCompile Include="AttributedBar.cpp" />
     <ClCompile Include="AttributedChild.cpp" />
+    <ClCompile Include="AttributedGrandChild.cpp" />
     <ClCompile Include="Datum.Test.cpp" />
+    <ClCompile Include="DogSubscriber.cpp" />
+    <ClCompile Include="Empty.cpp" />
+    <ClCompile Include="EmptyChild.cpp" />
+    <ClCompile Include="Events.Test.cpp" />
+    <ClCompile Include="Factory.Test.cpp" />
     <ClCompile Include="FieaGameEngine.Test.cpp" />
+    <ClCompile Include="Foo.cpp" />
+    <ClCompile Include="GameObject.Test.cpp" />
+    <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="ParseCoordinator.Test.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -197,10 +208,17 @@
     <ClCompile Include="Scope.Test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\FieaGameEngine\Empty.h" />
-    <ClInclude Include="..\FieaGameEngine\EmptyChild.h" />
-    <ClInclude Include="..\FieaGameEngine\Foo.h" />
+    <ClInclude Include="..\FieaGameEngine\IntTestHandler.h" />
+    <ClInclude Include="..\FieaGameEngine\TestParseHandler.h" />
+    <ClInclude Include="AttributedBar.h" />
     <ClInclude Include="AttributedChild.h" />
+    <ClInclude Include="AttributedGrandChild.h" />
+    <ClInclude Include="ConcreteFactories.h" />
+    <ClInclude Include="DogSubscriber.h" />
+    <ClInclude Include="Empty.h" />
+    <ClInclude Include="EmptyChild.h" />
+    <ClInclude Include="Foo.h" />
+    <ClInclude Include="Monster.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
@@ -209,16 +227,23 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <CopyFileToFolders Include="..\Resources\DragonConfig.json">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\glm.1.0.0\build\native\glm.targets" Condition="Exists('..\packages\glm.1.0.0\build\native\glm.targets')" />
+    <Import Project="..\packages\jsoncpp.redist.0.6.0.1\build\native\jsoncpp.redist.targets" Condition="Exists('..\packages\jsoncpp.redist.0.6.0.1\build\native\jsoncpp.redist.targets')" />
+    <Import Project="..\packages\JsonCpp.Windows.1.9.2\build\JsonCpp.Windows.targets" Condition="Exists('..\packages\JsonCpp.Windows.1.9.2\build\JsonCpp.Windows.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\glm.1.0.0\build\native\glm.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\glm.1.0.0\build\native\glm.targets'))" />
+    <Error Condition="!Exists('..\packages\jsoncpp.redist.0.6.0.1\build\native\jsoncpp.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\jsoncpp.redist.0.6.0.1\build\native\jsoncpp.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\JsonCpp.Windows.1.9.2\build\JsonCpp.Windows.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\JsonCpp.Windows.1.9.2\build\JsonCpp.Windows.targets'))" />
   </Target>
 </Project>

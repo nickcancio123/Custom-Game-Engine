@@ -1,37 +1,38 @@
 #include "pch.h"
 #include "CppUnitTest.h"
-#include "Serialization.h"
 #include <vector>
 #include <codecvt>
-#include "AttributeRegistry.h"
 #include "FieaGameEngine.Test.cpp"
 
 #include "Datum.h"
 #include "Scope.h"
+#include "Serialization.h"
 #include "RTTI.h"
 #include "Attributed.h" 
+#include "TypeRegistry.h"
+
 #include "Empty.h"
 #include "EmptyChild.h"
 #include "Foo.h"
 #include "AttributedChild.h"
+#include "AttributedGrandChild.h"
+#include "AttributedBar.h"
 
 
 using namespace Fiea::GameEngine;
+using namespace Fiea::GameEngine::Test;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 
-namespace FieaGameEngineTest
+namespace Fiea::GameEngine::Test
 {
 	TEST_CLASS(AttributedTests)
 	{
 		TEST_CLASS_INITIALIZE(ClassInitialize)
 		{
-			AttributeRegistry::Create();
-		}
-
-		TEST_CLASS_CLEANUP(ClassCleanup)
-		{
-			AttributeRegistry::Destroy();
+			TypeRegistry::RegisterSignatures(AttributedChild::TypeIdClass(), AttributedChild::Signatures());
+			TypeRegistry::RegisterSignatures(AttributedGrandChild::TypeIdClass(), AttributedGrandChild::Signatures(), AttributedChild::TypeIdClass());
+			TypeRegistry::RegisterSignatures(AttributedBar::TypeIdClass(), AttributedBar::Signatures());
 		}
 
 		TEST_METHOD_INITIALIZE(Initialize)
@@ -68,13 +69,6 @@ namespace FieaGameEngineTest
 
 				// Test double binding
 				Assert::IsTrue(reinterpret_cast<RTTI*>(&AC) == D1->GetPointer());
-			}
-
-			// Double prescribed attribute creation
-			{
-				AttributedChild AC;
-
-				AC.CreatePrescribedAttributesAgain();
 			}
 
 			// Pointer
@@ -148,7 +142,7 @@ namespace FieaGameEngineTest
 				Assert::AreEqual(AC._Float, D1->GetFloat());
 
 				// Test double binding
-				AC._Int = 5;
+				AC._Float = 5;
 				Assert::AreEqual(AC._Float, D1->GetFloat());
 				D1->Set(10);
 				Assert::AreEqual(AC._Float, D1->GetFloat());
@@ -304,10 +298,10 @@ namespace FieaGameEngineTest
 		{
 			AttributedChild AC;
 
-			Assert::ExpectException<std::runtime_error>([&AC]() { AC.AppendAuxilliaryAttribute("this"); });
-			
+			Assert::ExpectException<std::runtime_error>([&AC]() { AC.AppendAuxilliaryAttribute("Foo"); });
+
 			Datum& AppendedDatum = AC.AppendAuxilliaryAttribute("Aux");
-			
+
 			Assert::AreSame(AppendedDatum, *AC.Find("Aux"));
 		}
 
@@ -394,6 +388,17 @@ namespace FieaGameEngineTest
 			AC1.AppendAuxilliaryAttribute("foo");
 			AttributedChild AC3(AC1);
 			Assert::AreEqual(AC1, AC3);
+
+			// Test double binding of old copy
+			Datum* D1 = AC1.Find("Int");
+			Assert::IsNotNull(D1);
+
+			Assert::AreEqual(AC1._Int, D1->GetInt());
+
+			AC1._Int = 5;
+			Assert::AreEqual(AC1._Int, D1->GetInt());
+			D1->Set(10);
+			Assert::AreEqual(AC1._Int, D1->GetInt());
 		}
 
 		TEST_METHOD(CopyAssignment)
@@ -444,6 +449,37 @@ namespace FieaGameEngineTest
 				AC4 = std::move(AC3);
 				Assert::AreNotEqual(AC3, AC4);
 			}
+		}
+
+		TEST_METHOD(DeepInheritance)
+		{
+			AttributedGrandChild AGC;
+
+			Assert::IsTrue(AGC.IsPrescribedAttribute("Foo"));
+			Assert::IsTrue(AGC.IsPrescribedAttribute("Int"));
+			Assert::IsTrue(AGC.IsPrescribedAttribute("Float"));
+			Assert::IsTrue(AGC.IsPrescribedAttribute("String"));
+			Assert::IsTrue(AGC.IsPrescribedAttribute("Vec4"));
+			Assert::IsTrue(AGC.IsPrescribedAttribute("Mat4x4"));
+
+			Assert::IsTrue(AGC.IsPrescribedAttribute("SecondInt"));
+			Assert::IsTrue(AGC.IsPrescribedAttribute("SecondFloat"));
+		}
+
+		TEST_METHOD(AttributedResponsibility)
+		{
+			AttributedBar AB;
+
+			// Test double binding
+			Datum* D1 = AB.Find("Int");
+			Assert::IsNotNull(D1);
+
+			Assert::AreEqual(AB._Int, D1->GetInt());
+
+			AB._Int = 5;
+			Assert::AreEqual(AB._Int, D1->GetInt());
+			D1->Set(10);
+			Assert::AreEqual(AB._Int, D1->GetInt());
 		}
 
 	private:

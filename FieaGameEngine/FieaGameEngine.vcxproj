@@ -71,24 +71,24 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)lib\</OutDir>
+    <OutDir>$(SolutionDir)lib\$(Platform)-$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)$(Platform)-$(Configuration)</TargetName>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)lib\</OutDir>
+    <OutDir>$(SolutionDir)lib\$(Platform)-$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)$(Platform)-$(Configuration)</TargetName>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)lib\</OutDir>
+    <OutDir>$(SolutionDir)lib\$(Platform)-$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)$(Platform)-$(Configuration)</TargetName>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)lib\</OutDir>
+    <OutDir>$(SolutionDir)lib\$(Platform)-$(Configuration)\</OutDir>
     <IntDir>build\$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)$(Platform)-$(Configuration)</TargetName>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -167,21 +167,56 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Action.h" />
+    <ClInclude Include="ActionIncrement.h" />
+    <ClInclude Include="ActionList.h" />
+    <ClInclude Include="ActionWhile.h" />
     <ClInclude Include="Attributed.h" />
-    <ClInclude Include="AttributeRegistry.h" />
     <ClInclude Include="Datum.h" />
+    <ClInclude Include="DatumParseHandler.h" />
+    <ClInclude Include="Event.h" />
+    <ClInclude Include="EventDispatcher.h" />
+    <ClInclude Include="EventSubscriber.h" />
+    <ClInclude Include="Factory.h" />
+    <ClInclude Include="FactoryManager.h" />
+    <ClInclude Include="FloatParseHandler.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="GameClock.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameObjectParseHandler.h" />
+    <ClInclude Include="IntParseHandler.h" />
+    <ClInclude Include="MatrixParseHandler.h" />
+    <ClInclude Include="ParseCoordinator.h" />
+    <ClInclude Include="ParseHandler.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="RTTI.h" />
     <ClInclude Include="Scope.h" />
+    <ClInclude Include="ScopeParseHandler.h" />
+    <ClInclude Include="ScopeWrapper.h" />
     <ClInclude Include="Serialization.h" />
     <ClInclude Include="Signature.h" />
+    <ClInclude Include="StringParseHandler.h" />
+    <ClInclude Include="TypeRegistry.h" />
+    <ClInclude Include="Vec4ParseHandler.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Action.cpp" />
+    <ClCompile Include="ActionIncrement.cpp" />
+    <ClCompile Include="ActionList.cpp" />
+    <ClCompile Include="ActionWhile.cpp" />
     <ClCompile Include="Attributed.cpp" />
-    <ClCompile Include="AttributeRegistry.cpp" />
     <ClCompile Include="Datum.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="DatumParserHandler.cpp" />
+    <ClCompile Include="Event.cpp" />
+    <ClCompile Include="Factory.cpp" />
+    <ClCompile Include="FloatParseHandler.cpp" />
+    <ClCompile Include="GameClock.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameObjectParseHandler.cpp" />
+    <ClCompile Include="IntParseHandler.cpp" />
+    <ClCompile Include="MatrixParseHandler.cpp" />
+    <ClCompile Include="ParseCoordinator.cpp" />
+    <ClCompile Include="ParseHandler.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -190,19 +225,30 @@
     </ClCompile>
     <ClCompile Include="RTTI.cpp" />
     <ClCompile Include="Scope.cpp" />
+    <ClCompile Include="ScopeParseHandler.cpp" />
+    <ClCompile Include="ScopeWrapper.cpp" />
+    <ClCompile Include="StringParseHandler.cpp" />
+    <ClCompile Include="TypeRegistry.cpp" />
+    <ClCompile Include="Vec4ParseHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Event.inl" />
+    <ClCompile Include="EventDispatcher.cpp" />
     <None Include="packages.config" />
     <None Include="RTTI.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\glm.1.0.0\build\native\glm.targets" Condition="Exists('..\packages\glm.1.0.0\build\native\glm.targets')" />
+    <Import Project="..\packages\jsoncpp.redist.0.6.0.1\build\native\jsoncpp.redist.targets" Condition="Exists('..\packages\jsoncpp.redist.0.6.0.1\build\native\jsoncpp.redist.targets')" />
+    <Import Project="..\packages\JsonCpp.Windows.1.9.2\build\JsonCpp.Windows.targets" Condition="Exists('..\packages\JsonCpp.Windows.1.9.2\build\JsonCpp.Windows.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\glm.1.0.0\build\native\glm.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\glm.1.0.0\build\native\glm.targets'))" />
+    <Error Condition="!Exists('..\packages\jsoncpp.redist.0.6.0.1\build\native\jsoncpp.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\jsoncpp.redist.0.6.0.1\build\native\jsoncpp.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\JsonCpp.Windows.1.9.2\build\JsonCpp.Windows.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\JsonCpp.Windows.1.9.2\build\JsonCpp.Windows.targets'))" />
   </Target>
 </Project>

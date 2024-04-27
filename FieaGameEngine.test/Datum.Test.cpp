@@ -16,10 +16,11 @@
 
 
 using namespace Fiea::GameEngine;
+using namespace Fiea::GameEngine::Test;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 
-namespace FieaGameEngineTest
+namespace Fiea::GameEngine::Test
 {
 	TEST_CLASS(DatumTests)
 	{

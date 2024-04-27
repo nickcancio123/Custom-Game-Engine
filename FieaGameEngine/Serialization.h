@@ -29,14 +29,15 @@ namespace Fiea
 
 		inline static std::string SerializeVec4(const glm::vec4 Item)
 		{
-			std::string Out = SerializeFloat(Item.x);
+			std::string Out = "vec4| ";
+			Out.append(SerializeFloat(Item.x));
 			Out.append(", ");
 			Out.append(SerializeFloat(Item.y));
 			Out.append(", ");
 			Out.append(SerializeFloat(Item.z));
 			Out.append(", ");
 			Out.append(SerializeFloat(Item.w));
-
+			Out.append(" |");
 			return Out;
 		}
 
@@ -47,13 +48,44 @@ namespace Fiea
 			auto v3 = M[2];
 			auto v4 = M[3];
 
-			std::string Out = SerializeVec4(glm::vec4(v1[0], v1[1], v1[2], v1[3]));
+			std::string Out = "mat4x4| ";
+
+			Out.append(SerializeFloat(v1[0]));
 			Out.append(", ");
-			Out.append(SerializeVec4(glm::vec4(v2[0], v2[1], v2[2], v2[3])));
+			Out.append(SerializeFloat(v1[1]));
 			Out.append(", ");
-			Out.append(SerializeVec4(glm::vec4(v3[0], v3[1], v3[2], v3[3])));
+			Out.append(SerializeFloat(v1[2]));
 			Out.append(", ");
-			Out.append(SerializeVec4(glm::vec4(v4[0], v4[1], v4[2], v4[3])));
+			Out.append(SerializeFloat(v1[3]));
+			Out.append(", ");
+
+			Out.append(SerializeFloat(v4[0]));
+			Out.append(", ");
+			Out.append(SerializeFloat(v4[1]));
+			Out.append(", ");
+			Out.append(SerializeFloat(v4[2]));
+			Out.append(", ");
+			Out.append(SerializeFloat(v4[3]));
+			Out.append(", ");
+
+			Out.append(SerializeFloat(v4[0]));
+			Out.append(", ");
+			Out.append(SerializeFloat(v4[1]));
+			Out.append(", ");
+			Out.append(SerializeFloat(v4[2]));
+			Out.append(", ");
+			Out.append(SerializeFloat(v4[3]));
+			Out.append(", ");
+
+			Out.append(SerializeFloat(v4[0]));
+			Out.append(", ");
+			Out.append(SerializeFloat(v4[1]));
+			Out.append(", ");
+			Out.append(SerializeFloat(v4[2]));
+			Out.append(", ");
+			Out.append(SerializeFloat(v4[3]));
+
+			Out.append(" |");
 
 			return Out;
 		}
@@ -98,7 +130,7 @@ namespace Fiea
 			float z;
 			float w;
 
-			int ParsedItems = sscanf_s(String.c_str(), "%f %*s %f %*s %f %*s %f", &x, &y, &z, &w);
+			int ParsedItems = sscanf_s(String.c_str(), "%*s %f %*s %f %*s %f %*s %f", &x, &y, &z, &w);
 
 			if (ParsedItems < 4)
 			{
@@ -117,7 +149,11 @@ namespace Fiea
 
 			int ParsedItems = sscanf_s(
 				String.c_str(),
-				"%f %*s %f %*s %f %*s %f %*s %f %*s %f %*s %f %*s %f %*s %f %*s %f %*s %f %*s %f %*s %f %*s %f %*s %f %*s %f",
+				"\
+				%*s %f %*s %f %*s %f %*s %f \
+				%*s %f %*s %f %*s %f %*s %f \
+				%*s %f %*s %f %*s %f %*s %f \
+				%*s %f %*s %f %*s %f %*s %f",
 				&v1.x, &v1.y, &v1.z, &v1.w,
 				&v2.x, &v2.y, &v2.z, &v2.w,
 				&v3.x, &v3.y, &v3.z, &v3.w,

@@ -1,18 +1,29 @@
 #include "pch.h"
 #include "Attributed.h"
-#include "AttributeRegistry.h"
+#include "TypeRegistry.h"
+#include <deque>
+#include <memory>
 
 
 using namespace Fiea::GameEngine;
 
 
+RTTI_DEFINITIONS(Attributed);
+
+
+
 #pragma region === Constructors & Destructors ===
+
+Attributed::Attributed(size_t TypeId)
+{
+	CreatePrescribedAttributes(TypeId);
+}
 
 Attributed::Attributed(const Attributed& Other)
 	: Scope(Other)
 {
 	_AuxilliaryAttributeNames = Other._AuxilliaryAttributeNames;
-	_PrescribedAttributesCreated = true;
+
 
 	Datum* FoundDatum = Find("this");
 	if (FoundDatum)
@@ -25,7 +36,7 @@ Attributed::Attributed(Attributed&& Other) noexcept
 	: Scope(std::move(Other))
 {
 	_AuxilliaryAttributeNames = std::move(Other._AuxilliaryAttributeNames);
-	_PrescribedAttributesCreated = true;
+
 
 	Datum* FoundDatum = Find("this");
 	if (FoundDatum)
@@ -51,7 +62,6 @@ Attributed& Attributed::operator=(const Attributed& Other)
 	Scope::operator=(Other);
 
 	_AuxilliaryAttributeNames = Other._AuxilliaryAttributeNames;
-	_PrescribedAttributesCreated = true;
 
 	Datum* FoundDatum = Find("this");
 	if (FoundDatum)
@@ -68,7 +78,6 @@ Attributed& Attributed::operator=(Attributed&& Other) noexcept
 	Scope::operator=(std::move(Other));
 
 	_AuxilliaryAttributeNames = std::move(Other._AuxilliaryAttributeNames);
-	_PrescribedAttributesCreated = true;
 
 	Datum* FoundDatum = Find("this");
 	if (FoundDatum)
@@ -82,89 +91,23 @@ Attributed& Attributed::operator=(Attributed&& Other) noexcept
 #pragma endregion
 
 
-void Attributed::CreatePrescribedAttributes()
+void Attributed::CreatePrescribedAttributes(size_t TypeId)
 {
-	if (_PrescribedAttributesCreated)
+	const std::shared_ptr<std::deque<Signature>> PrescribedSignatures = TypeRegistry::GetSignaturesOfType(TypeId);
+
+	assert(PrescribedSignatures != nullptr);
+
+	for (auto Sig : *PrescribedSignatures)
 	{
-		return;
-	}
+		Datum& NewDatum = Append(Sig.Name());
+		NewDatum.SetType(Sig.Type());
 
-	AttributeRegistry* Registry = AttributeRegistry::GetInstance();
-	assert(Registry);
-
-	const std::vector<Signature>* PrescribedAttributeSignatures = Registry->GetAttributeSignatures(TypeIdInstance());
-	if (!PrescribedAttributeSignatures)
-	{
-		PrescribedAttributeSignatures = RegisterAttributeSignatures();
-	}
-	assert(PrescribedAttributeSignatures);
-
-	for (auto Sig : *PrescribedAttributeSignatures)
-	{
-		switch (Sig.Type())
+		if (Sig.Size() > 0)
 		{
-
-		case Datum::POINTER:
-		{
-			for (unsigned int i = 0; i < Sig.Size(); ++i)
-			{
-				auto MemberAddress = (unsigned char*)(this) + Sig.Offset() + (sizeof(RTTI*) * i);
-				Datum& D1 = Append(Sig.Name());
-				D1.PushBack(reinterpret_cast<RTTI*>(MemberAddress));
-			}
-
-			break;
-		}
-
-		case Datum::INT:
-		{
-			Datum& IntDatum = Append(Sig.Name());
-			auto MemberAddress = (unsigned char*)(this) + Sig.Offset();
-			IntDatum.StoreExternal(reinterpret_cast<int*>(MemberAddress), Sig.Size());
-			break;
-		}
-
-		case Datum::FLOAT:
-		{
-			Datum& FloatDatum = Append(Sig.Name());
-			auto MemberAddress = (unsigned char*)(this) + Sig.Offset();
-			FloatDatum.StoreExternal(reinterpret_cast<float*>(MemberAddress), Sig.Size());
-			break;
-		}
-
-		case Datum::STRING:
-		{
-			Datum& StringDatum = Append(Sig.Name());
-			auto MemberAddress = (unsigned char*)(this) + Sig.Offset();
-			StringDatum.StoreExternal(reinterpret_cast<std::string*>(MemberAddress), Sig.Size());
-			break;
-		}
-
-		case Datum::VEC4:
-		{
-			Datum& Vec4Datum = Append(Sig.Name());
-			auto MemberAddress = (unsigned char*)(this) + Sig.Offset();
-			Vec4Datum.StoreExternal(reinterpret_cast<glm::vec4*>(MemberAddress), Sig.Size());
-			break;		
-		}
-
-		case Datum::MAT4X4:
-		{
-			Datum& MatDatum = Append(Sig.Name());
-			auto MemberAddress = (unsigned char*)(this) + Sig.Offset();
-			MatDatum.StoreExternal(reinterpret_cast<glm::mat4x4*>(MemberAddress), Sig.Size());
-			break;	
-		}
-
-		default:
-		{
-			throw std::runtime_error("Attempted to create attribute of invalid type");
-			break;
-		}
+			unsigned char* MemberAddress = (unsigned char*)(this) + Sig.Offset();
+			NewDatum.StoreExternalGeneric(MemberAddress, Sig.Size());
 		}
 	}
-
-	_PrescribedAttributesCreated = true;
 }
 
 Datum& Attributed::AppendAuxilliaryAttribute(const std::string Name)
@@ -192,14 +135,9 @@ bool Attributed::IsAttribute(const std::string& Name)
 
 bool Attributed::IsPrescribedAttribute(const std::string& Name)
 {
-	AttributeRegistry* Registry = AttributeRegistry::GetInstance();
-	assert(Registry);
+	const std::shared_ptr<std::deque<Signature>> PrescribedAttributeSignatures = TypeRegistry::GetSignaturesOfType(TypeIdInstance());
 
-	const std::vector<Signature>* PrescribedAttributeSignatures = Registry->GetAttributeSignatures(TypeIdInstance());
-	if (!PrescribedAttributeSignatures)
-	{
-		PrescribedAttributeSignatures = RegisterAttributeSignatures();
-	}
+	assert(PrescribedAttributeSignatures != nullptr);
 
 	for (auto Sig : *PrescribedAttributeSignatures)
 	{

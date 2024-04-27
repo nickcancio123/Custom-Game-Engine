@@ -1,71 +1,230 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source">
+    <Filter Include="Engine">
+      <UniqueIdentifier>{0535ff12-3424-4a37-85b1-cb071fe8ff37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Headers">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Engine\Headers\Actions">
+      <UniqueIdentifier>{da42c917-02f7-4371-8e86-5d8f95ac875c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Source">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Headers">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="Engine\Source\Actions">
+      <UniqueIdentifier>{db8209f7-3dfb-4ff7-931f-e7e5eeb17004}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Headers\Parsing">
+      <UniqueIdentifier>{6b0a4479-f60a-45c9-b795-fb611e18726d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Headers\Parsing\Handlers">
+      <UniqueIdentifier>{e8edfce4-cbab-4710-888f-93400c4f9679}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Source\Parsing">
+      <UniqueIdentifier>{a38b53f7-7798-4c15-9868-0a5acb720719}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Source\Parsing\Handlers">
+      <UniqueIdentifier>{526b8f8c-f089-4760-a73d-6a3743909906}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Headers\Core">
+      <UniqueIdentifier>{6a2896d5-e169-4c5c-82eb-7c0b3c84167b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Source\Core">
+      <UniqueIdentifier>{b3f31a60-2746-418c-9dbd-7dffde39845c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Headers\Events">
+      <UniqueIdentifier>{ed75fd10-0acf-46b5-a00c-b53a13bfe7a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Source\Events">
+      <UniqueIdentifier>{1442f28d-77e2-400a-8635-840ae416c305}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
-      <Filter>Headers</Filter>
+      <Filter>Engine\Headers</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
-      <Filter>Headers</Filter>
+      <Filter>Engine\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Datum.h">
-      <Filter>Headers</Filter>
+    <ClInclude Include="ActionIncrement.h">
+      <Filter>Engine\Headers\Actions</Filter>
     </ClInclude>
-    <ClInclude Include="Serialization.h">
-      <Filter>Headers</Filter>
+    <ClInclude Include="ActionList.h">
+      <Filter>Engine\Headers\Actions</Filter>
     </ClInclude>
-    <ClInclude Include="RTTI.h">
-      <Filter>Headers</Filter>
+    <ClInclude Include="ActionWhile.h">
+      <Filter>Engine\Headers\Actions</Filter>
     </ClInclude>
-    <ClInclude Include="Scope.h">
-      <Filter>Headers</Filter>
+    <ClInclude Include="FloatParseHandler.h">
+      <Filter>Engine\Headers\Parsing\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectParseHandler.h">
+      <Filter>Engine\Headers\Parsing\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="IntParseHandler.h">
+      <Filter>Engine\Headers\Parsing\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="MatrixParseHandler.h">
+      <Filter>Engine\Headers\Parsing\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="ScopeParseHandler.h">
+      <Filter>Engine\Headers\Parsing\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="StringParseHandler.h">
+      <Filter>Engine\Headers\Parsing\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="Vec4ParseHandler.h">
+      <Filter>Engine\Headers\Parsing\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="ParseCoordinator.h">
+      <Filter>Engine\Headers\Parsing</Filter>
+    </ClInclude>
+    <ClInclude Include="ParseHandler.h">
+      <Filter>Engine\Headers\Parsing</Filter>
+    </ClInclude>
+    <ClInclude Include="ScopeWrapper.h">
+      <Filter>Engine\Headers\Parsing</Filter>
+    </ClInclude>
+    <ClInclude Include="DatumParseHandler.h">
+      <Filter>Engine\Headers\Parsing\Handlers</Filter>
     </ClInclude>
     <ClInclude Include="Attributed.h">
-      <Filter>Headers</Filter>
+      <Filter>Engine\Headers\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Datum.h">
+      <Filter>Engine\Headers\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Factory.h">
+      <Filter>Engine\Headers\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Engine\Headers\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="RTTI.h">
+      <Filter>Engine\Headers\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Scope.h">
+      <Filter>Engine\Headers\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Serialization.h">
+      <Filter>Engine\Headers\Core</Filter>
     </ClInclude>
     <ClInclude Include="Signature.h">
-      <Filter>Headers</Filter>
+      <Filter>Engine\Headers\Core</Filter>
     </ClInclude>
-    <ClInclude Include="AttributeRegistry.h">
-      <Filter>Headers</Filter>
+    <ClInclude Include="TypeRegistry.h">
+      <Filter>Engine\Headers\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="FactoryManager.h">
+      <Filter>Engine\Headers\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSubscriber.h">
+      <Filter>Engine\Headers\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="EventDispatcher.h">
+      <Filter>Engine\Headers\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Event.h">
+      <Filter>Engine\Headers\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Action.h">
+      <Filter>Engine\Headers\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClock.h">
+      <Filter>Engine\Headers\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
-      <Filter>Source</Filter>
+      <Filter>Engine\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Datum.cpp">
-      <Filter>Source</Filter>
+    <ClCompile Include="ActionIncrement.cpp">
+      <Filter>Engine\Source\Actions</Filter>
     </ClCompile>
-    <ClCompile Include="RTTI.cpp">
-      <Filter>Source</Filter>
+    <ClCompile Include="ActionList.cpp">
+      <Filter>Engine\Source\Actions</Filter>
     </ClCompile>
-    <ClCompile Include="Scope.cpp">
-      <Filter>Source</Filter>
+    <ClCompile Include="ActionWhile.cpp">
+      <Filter>Engine\Source\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="FloatParseHandler.cpp">
+      <Filter>Engine\Source\Parsing\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectParseHandler.cpp">
+      <Filter>Engine\Source\Parsing\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="IntParseHandler.cpp">
+      <Filter>Engine\Source\Parsing\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="MatrixParseHandler.cpp">
+      <Filter>Engine\Source\Parsing\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="ScopeParseHandler.cpp">
+      <Filter>Engine\Source\Parsing\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="StringParseHandler.cpp">
+      <Filter>Engine\Source\Parsing\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="Vec4ParseHandler.cpp">
+      <Filter>Engine\Source\Parsing\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="ParseCoordinator.cpp">
+      <Filter>Engine\Source\Parsing</Filter>
+    </ClCompile>
+    <ClCompile Include="ParseHandler.cpp">
+      <Filter>Engine\Source\Parsing</Filter>
+    </ClCompile>
+    <ClCompile Include="ScopeWrapper.cpp">
+      <Filter>Engine\Source\Parsing</Filter>
+    </ClCompile>
+    <ClCompile Include="DatumParserHandler.cpp">
+      <Filter>Engine\Source\Parsing\Handlers</Filter>
     </ClCompile>
     <ClCompile Include="Attributed.cpp">
-      <Filter>Source</Filter>
+      <Filter>Engine\Source\Core</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source</Filter>
+    <ClCompile Include="Datum.cpp">
+      <Filter>Engine\Source\Core</Filter>
     </ClCompile>
-    <ClCompile Include="AttributeRegistry.cpp">
-      <Filter>Source</Filter>
+    <ClCompile Include="Factory.cpp">
+      <Filter>Engine\Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Engine\Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="RTTI.cpp">
+      <Filter>Engine\Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Scope.cpp">
+      <Filter>Engine\Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="TypeRegistry.cpp">
+      <Filter>Engine\Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Event.cpp">
+      <Filter>Engine\Source\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Action.cpp">
+      <Filter>Engine\Source\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="EventDispatcher.cpp">
+      <Filter>Engine\Source\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="GameClock.cpp">
+      <Filter>Engine\Source\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="RTTI.inl">
-      <Filter>Headers</Filter>
+      <Filter>Engine\Headers\Core</Filter>
+    </None>
+    <None Include="Event.inl">
+      <Filter>Engine\Headers\Events</Filter>
     </None>
   </ItemGroup>
 </Project>

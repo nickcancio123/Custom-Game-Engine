@@ -29,21 +29,20 @@ Scope::Scope(const Scope& Other)
 		auto KeyValue = Other._NameToDatum.find(OrderedName);
 		assert(KeyValue != Other._NameToDatum.end());
 
-		Datum* NamedDatum = KeyValue->second;
-		assert(NamedDatum);
+		const Datum& NamedDatum = KeyValue->second;
 
 		// If contains scopes, manually create scopes
-		if (NamedDatum->GetType() == Datum::SCOPE)
+		if (NamedDatum.GetType() == Datum::SCOPE)
 		{
-			for (unsigned int i = 0; i < NamedDatum->Size(); ++i)
+			for (unsigned int i = 0; i < NamedDatum.Size(); ++i)
 			{
-				Adopt(OrderedName, *NamedDatum->GetScope(i)->Clone());
+				Adopt(OrderedName, *NamedDatum.GetScope(i)->Clone());
 			}
 		}
 		else
 		{
 			Datum& NewDatum = Append(OrderedName);
-			NewDatum = *NamedDatum;
+			NewDatum = NamedDatum;
 		}
 	}
 }
@@ -95,8 +94,8 @@ Scope& Scope::operator=(Scope&& Other) noexcept
 	Clear();
 
 	// Copy data
-	_NameToDatum = Other._NameToDatum;
-	_OrderedNames = Other._OrderedNames;
+	_NameToDatum = std::move(Other._NameToDatum);
+	_OrderedNames = std::move(Other._OrderedNames);
 
 	// Remove Other's ownership & delete
 	Other._NameToDatum.clear();
@@ -119,7 +118,7 @@ Datum& Scope::operator[](unsigned int Index)
 
 	const std::string Name = _OrderedNames[Index];
 
-	return *_NameToDatum.at(Name);
+	return _NameToDatum.at(Name);
 }
 
 bool Scope::operator==(const Scope& Other) const
@@ -147,7 +146,7 @@ bool Scope::operator==(const Scope& Other) const
 		// Check values
 		auto FoundKeyValue = _NameToDatum.find(_OrderedNames[i]);
 		auto OtherFoundKeyValue = Other._NameToDatum.find(Other._OrderedNames[i]);
-		if (*FoundKeyValue->second != *OtherFoundKeyValue->second)
+		if (FoundKeyValue->second != OtherFoundKeyValue->second)
 		{
 			return false;
 		}
@@ -166,19 +165,20 @@ bool Scope::operator!=(const Scope& Other) const
 
 Datum& Scope::Append(const std::string Name)
 {		
+	// TODO - remove unnecessary find: insert returns a pair with a bool whether key already exists
+
 	auto FoundKeyValue = _NameToDatum.find(Name);
 	
 	// If key doesn't already exists
 	if (FoundKeyValue == _NameToDatum.end())
 	{
-		Datum* NewDatum = new Datum();
-		_NameToDatum.insert({ Name, NewDatum });
+		auto NewPair = _NameToDatum.insert({ Name, Datum()});
 		_OrderedNames.push_back(Name);
-		return *NewDatum;
+		return NewPair.first->second;
 	}
 
 	// If key already exists
-	return *FoundKeyValue->second;
+	return FoundKeyValue->second;
 }
 
 Scope& Scope::AppendScope(const std::string Name)
@@ -257,7 +257,7 @@ bool Scope::IsDescendantOf(const Scope* Other) const
 	}
 
 	unsigned int Index = -1;
-	Datum* FoundDatum = Other->FindContainedScope(this, Index);
+	const Datum* FoundDatum = Other->FindContainedScope(this, Index);
 
 	return FoundDatum != nullptr;
 }
@@ -269,25 +269,20 @@ void Scope::Clear()
 	while (_NameToDatum.size() > 0)
 	{
 		auto KeyValue = _NameToDatum.begin();
-		Datum* NamedDatum = KeyValue->second;
+		const Datum& NamedDatum = KeyValue->second;
 
-		if (NamedDatum != nullptr)
+		// Delete child scopes
+		if (NamedDatum.GetType() == Datum::SCOPE)
 		{
-			// Delete child scopes
-			if (NamedDatum->GetType() == Datum::SCOPE)
+			for (unsigned int i = 0; i < NamedDatum.Size(); ++i)
 			{
-				for (unsigned int i = 0; i < NamedDatum->Size(); ++i)
+				Scope* ChildScope = NamedDatum.GetScope(i);
+				if (ChildScope != nullptr)
 				{
-					Scope* ChildScope = NamedDatum->GetScope(i);
-					if (ChildScope != nullptr)
-					{
-						ChildScope->_Parent = nullptr;
-						delete ChildScope;
-					}
+					ChildScope->_Parent = nullptr;
+					delete ChildScope;
 				}
 			}
-
-			delete NamedDatum;
 		}
 
 		_NameToDatum.erase(KeyValue);
@@ -304,43 +299,48 @@ Scope* Scope::Clone() const
 
 #pragma region === Find & Search ===
 
-Datum* Scope::FindContainedScope(const Scope* ScopeToFind, unsigned int& ScopeIndex) const
+Datum* Scope::FindContainedScope(const Scope* ScopeToFind, unsigned int& ScopeIndex)
 {
-	if (ScopeToFind == nullptr)
+	const Scope* ConstThis = static_cast<const Scope*>(this);
+	return const_cast<Datum*>(ConstThis->FindContainedScope(ScopeToFind, ScopeIndex));
+}
+
+const Datum* Scope::FindContainedScope(const Scope* ScopeToFind, unsigned int& ScopeIndex) const
+{
+	if (ScopeToFind == nullptr || _NameToDatum.empty())
 	{
 		return nullptr;
 	}
 
-	if (_NameToDatum.empty())
+	for (auto& KeyValue : _NameToDatum)
 	{
-		return nullptr;
-	}
+		const Datum* NamedDatum = &KeyValue.second;
 
-	for (auto KeyValue : _NameToDatum)
-	{
-		Datum* NamedDatum = KeyValue.second;
-		
-		if (NamedDatum->GetType() == Datum::SCOPE)
+		if (NamedDatum->GetType() != Datum::SCOPE)
 		{
-			for (unsigned int i = 0; i < NamedDatum->Size(); ++i)
+			continue;
+		}
+
+		for (unsigned int i = 0; i < NamedDatum->Size(); ++i)
+		{
+			Scope* NestedScope = NamedDatum->GetScope(i);
+
+			if (NestedScope == ScopeToFind)
 			{
-				Scope* NestedScope = NamedDatum->GetScope(i);
+				ScopeIndex = i;
+				return NamedDatum;
+			}
 
-				if (NestedScope == ScopeToFind)
-				{
-					ScopeIndex = i;
-					return NamedDatum;
-				}
+			if (!NestedScope)
+			{
+				continue;
+			}
 
-				if (NestedScope)
-				{
-					Datum* NestedDatum = NestedScope->FindContainedScope(ScopeToFind, ScopeIndex);
+			Datum* NestedDatum = NestedScope->FindContainedScope(ScopeToFind, ScopeIndex);
 
-					if (NestedDatum != nullptr)
-					{
-						return NestedDatum;
-					}
-				}
+			if (NestedDatum != nullptr)
+			{
+				return NestedDatum;
 			}
 		}
 	}
@@ -355,15 +355,15 @@ bool Scope::FindNameOfContainedScope(const Scope* ScopeToFind, std::string& Name
 		return false;
 	}
 
-	for (auto KeyValue : _NameToDatum)
+	for (auto& KeyValue : _NameToDatum)
 	{
-		Datum* NamedDatum = KeyValue.second;
+		Datum& NamedDatum = KeyValue.second;
 
-		if (NamedDatum->GetType() == Datum::SCOPE)
+		if (NamedDatum.GetType() == Datum::SCOPE)
 		{
-			for (unsigned int i = 0; i < NamedDatum->Size(); ++i)
+			for (unsigned int i = 0; i < NamedDatum.Size(); ++i)
 			{
-				Scope* ChildScope = NamedDatum->GetScope(i);
+				Scope* ChildScope = NamedDatum.GetScope(i);
 
 				if (ChildScope == ScopeToFind)
 				{
@@ -377,25 +377,26 @@ bool Scope::FindNameOfContainedScope(const Scope* ScopeToFind, std::string& Name
 	return false;
 }
 
-Datum* Scope::Find(const std::string Name) const
+Datum* Scope::Find(const std::string Name)
 {
-	auto FindItr = _NameToDatum.find(Name);
+	const Scope* ConstThis = static_cast<const Scope*>(this);
+	return const_cast<Datum*>(ConstThis->Find(Name));
+}
 
-	if (FindItr == _NameToDatum.end())
-	{
-		return nullptr;
-	}
-	else
-	{
-		return FindItr->second;
-	}
+const Datum* Scope::Find(const std::string Name) const
+{
+	auto Itr = _NameToDatum.find(Name);
+
+	bool Found = Itr != _NameToDatum.end();
+
+	return Found ? &Itr->second : nullptr;
 }
 
 Datum* Scope::Search(const std::string Name, Scope** FoundScope)
 {
-	for (auto KeyValue : _NameToDatum)
+	for (auto& KeyValue : _NameToDatum)
 	{
-		Datum* NamedDatum = KeyValue.second;
+		Datum* NamedDatum = &KeyValue.second;
 
 		// If found non-empty scope datum with same key, return
 		if (KeyValue.first == Name && 
@@ -421,9 +422,9 @@ Datum* Scope::Search(const std::string Name, Scope** FoundScope)
 
 const Datum* Scope::Search(const std::string Name, Scope** FoundScope) const
 {
-	for (auto KeyValue : _NameToDatum)
+	for (auto& KeyValue : _NameToDatum)
 	{
-		Datum* NamedDatum = KeyValue.second;
+		const Datum* NamedDatum = &KeyValue.second;
 
 		// If found non-empty scope datum with same key, return
 		if (KeyValue.first == Name && 

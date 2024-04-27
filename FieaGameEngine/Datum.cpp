@@ -353,6 +353,34 @@ Scope& Datum::operator[](const unsigned int Index)
 
 #pragma region === PushBack ===
 
+bool Datum::PushBackSerialized(const std::string& SerializedItem)
+{
+	assert(!_External);
+
+	if (_Type == Type::UKNOWN)
+	{
+		throw std::runtime_error("Cannot pushback serialized without having a datum type");
+	}
+
+	switch (_Type)
+	{
+	case INT: PushBack(DeserializeInt(SerializedItem));
+		break;
+	case FLOAT: PushBack(DeserializeFloat(SerializedItem));
+		break;
+	case STRING: PushBack(SerializedItem);
+		break;
+	case VEC4: PushBack(DeserializeVec4(SerializedItem));
+		break;
+	case MAT4X4: PushBack(DeserializeMat4x4(SerializedItem));
+		break;
+	default:
+		throw std::runtime_error("Invalid datum type for operation");
+	}
+
+	return true;
+}
+
 bool Datum::PushBack(Scope* NewItem)
 {
 	assert(!_External);
@@ -615,6 +643,31 @@ Scope* Datum::RemoveScopeAt(const unsigned int Index)
 	return RemovedScope;
 }
 
+bool Datum::RemoveScope(const Scope* ScopeToRemove)
+{
+	if (_Type != Type::SCOPE)
+	{
+		throw std::runtime_error(INVALID_TYPE_MSG);
+	}
+
+	for (unsigned int i = 0; i < _Size; ++i)
+	{
+		if (_Data[i].Scope == ScopeToRemove)
+		{
+			Scope* RemovedScope = _Data[i].Scope;
+
+			memmove(&_Data[i], &_Data[i + 1], sizeof(DataUnion) * (_Size - i + 1));
+
+			--_Size;
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
 void Datum::Clear()
 {
 	if (_External)
@@ -703,6 +756,62 @@ void Datum::AutoResize()
 
 
 #pragma region === Store External Data ===
+
+bool Datum::StoreExternalGeneric(unsigned char* ExternalItems, const unsigned int Size)
+{
+	if (ExternalItems == nullptr || _External)
+	{
+		return false;
+	}
+
+	switch (_Type)
+	{
+
+	case Datum::POINTER: return StoreExternal(reinterpret_cast<RTTI*>(ExternalItems), Size);
+
+	case Datum::INT: return StoreExternal(reinterpret_cast<int*>(ExternalItems), Size);
+
+	case Datum::FLOAT: return StoreExternal(reinterpret_cast<float*>(ExternalItems), Size);
+
+	case Datum::STRING: return StoreExternal(reinterpret_cast<std::string*>(ExternalItems), Size);
+
+	case Datum::VEC4: return StoreExternal(reinterpret_cast<glm::vec4*>(ExternalItems), Size);
+
+	case Datum::MAT4X4: return StoreExternal(reinterpret_cast<glm::mat4x4*>(ExternalItems), Size);
+
+	default: return false;
+
+	}
+}
+
+bool Datum::StoreExternal(RTTI* ExternalItems, const unsigned int Size)
+{
+	if (ExternalItems == nullptr || _External)
+	{
+		return false;
+	}
+
+	if (_Type == Type::UKNOWN)
+	{
+		_Type = Type::POINTER;
+	}
+
+	if (_Type != Type::POINTER)
+	{
+		return false;
+	}
+
+	Resize(Size);
+
+	for (unsigned int i = 0; i < Size; ++i)
+	{
+		_Data[i].RTTI = &ExternalItems[i];
+	}
+
+	_External = true;
+
+	return true;
+}
 
 bool Datum::StoreExternal(int* ExternalItems, const unsigned int Size)
 {

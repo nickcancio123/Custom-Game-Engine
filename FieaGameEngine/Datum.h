@@ -21,7 +21,9 @@ namespace Fiea
 		class Scope;
 		class RTTI;
 
-
+		/**
+		 * @brief A runtime-polymorphic data container that can be resized (similar to std::vector)
+		*/
 		class Datum
 		{
 		public:
@@ -122,6 +124,8 @@ namespace Fiea
 
 			#pragma region === PushBack ===
 
+			bool PushBackSerialized(const std::string& SerializedItem);
+
 			/**
 			 * @brief Adds a new item to the end of the container. Checks that datum type is correct first
 			 * @param NewItem Scope*
@@ -185,6 +189,13 @@ namespace Fiea
 			 * @return The removed scope
 			*/
 			[[nodiscard]] Scope* RemoveScopeAt(const unsigned int Index);
+			
+			/**
+			 * @brief Finds and removes the given scope
+			 * @param ScopeToRemove The scope to remove
+			 * @return If the scope was successfully found and removed
+			*/
+			bool RemoveScope(const Scope* ScopeToRemove);
 
 			/**
 			 * @brief Removes all items from container
@@ -201,7 +212,19 @@ namespace Fiea
 			#pragma region === Store External Data ===
 
 			/**
-			 * @brief Convert this datum into a wrapper of external unsigned ints 
+			 * @brief Convert this datum into a wrapper of given external data, first reinterpreting data as datum type
+			 * @param Size Number of items to wrap
+			*/
+			bool StoreExternalGeneric(unsigned char* ExternalItems, const unsigned int Size = 1);
+
+			/**
+			 * @brief Convert this datum into a wrapper of external RTTI pointers
+			 * @param Size Number of items to wrap
+			*/
+			bool StoreExternal(RTTI* ExternalItems, const unsigned int Size = 1);
+
+			/**
+			 * @brief Convert this datum into a wrapper of external ints 
 			 * @param Size Number of items to wrap
 			*/
 			bool StoreExternal(int* ExternalItems, const unsigned int Size = 1);
@@ -243,7 +266,7 @@ namespace Fiea
 			bool SetType(const Type NewType);
 
 			/**
-			 * @brief Set the value of an unsigned int at index
+			 * @brief Set the value of a scope at index
 			 * @return If successfully set item
 			*/
 			bool Set(Scope* Value, const unsigned int ItemIndex = 0);
@@ -255,7 +278,7 @@ namespace Fiea
 			bool Set(RTTI* Value, const unsigned int ItemIndex = 0);
 
 			/**
-			 * @brief Set the value of an unsigned int at index
+			 * @brief Set the value of an int at index
 			 * @return If successfully set item
 			*/
 			bool Set(const int Value, const unsigned int ItemIndex = 0);
@@ -314,7 +337,7 @@ namespace Fiea
 			/**
 			 * @brief Gets item at index. Checks if correct datum type and valid index.
 			 * @param ItemIndex Ordinal location of item 
-			 * @return Unsigned int at index
+			 * @return int at index
 			*/
 			int GetInt(const unsigned int ItemIndex = 0) const;
 

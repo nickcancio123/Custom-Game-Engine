@@ -8,14 +8,18 @@
 #include "Scope.h"
 #include "RTTI.h"
 #include "Attributed.h" 
+#include "GameObject.h"
+
 #include "Empty.h"
 #include "EmptyChild.h"
 #include "Foo.h"
 #include "AttributedChild.h"
+#include "AttributedGrandChild.h"
+#include "AttributedBar.h"
 
 
 using namespace Fiea::GameEngine;
-
+using namespace Fiea::GameEngine::Test;
 
 namespace Microsoft::VisualStudio::CppUnitTestFramework
 {
@@ -58,16 +62,34 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
 		return std::wstring(StrMat.cbegin(), StrMat.cend());
 	}
 
+	template<>
+	std::wstring ToString<GameObject>(const GameObject& T)
+	{
+		return std::to_wstring(0);
+	}
+
 
 	template<>
-	std::wstring ToString<Foo>(const Foo& T)
+	std::wstring ToString<Test::Foo>(const Foo& T)
 	{
 		std::string Str = std::to_string(T.Data());
 		return std::wstring(Str.cbegin(), Str.cend());
 	}
 
 	template<>
-	std::wstring ToString<AttributedChild>(const AttributedChild& T)
+	std::wstring ToString<Test::AttributedChild>(const AttributedChild& T)
+	{
+		return std::to_wstring(0);
+	}
+
+	template<>
+	std::wstring ToString<Test::AttributedGrandChild>(const AttributedGrandChild& T)
+	{
+		return std::to_wstring(0);
+	}
+
+	template<>
+	std::wstring ToString<Test::AttributedBar>(const AttributedBar& T)
 	{
 		return std::to_wstring(0);
 	}

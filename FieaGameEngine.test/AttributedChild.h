@@ -8,39 +8,42 @@ namespace Fiea
 {
 	namespace GameEngine
 	{
-
-		class AttributedChild : public Attributed
+		namespace Test
 		{
 
-		public:
-			virtual const std::vector<Signature>* RegisterAttributeSignatures() override;
+			class AttributedChild : public Attributed
+			{
+				RTTI_DECLARATIONS(AttributedChild, Attributed);
 
-			AttributedChild();
+			public:
+				AttributedChild(size_t TypeId = TypeIdClass());
 
-			AttributedChild(const AttributedChild& Other);
+				AttributedChild(const AttributedChild& Other);
 
-			virtual ~AttributedChild();
+				virtual ~AttributedChild();
 
-			virtual [[nodiscard]] AttributedChild* Clone() const override;
+				virtual [[nodiscard]] AttributedChild* Clone() const override;
 
-			AttributedChild& operator=(const AttributedChild& Other);
-			AttributedChild& operator=(AttributedChild&& Other) noexcept;
+				AttributedChild& operator=(const AttributedChild& Other);
+				AttributedChild& operator=(AttributedChild&& Other) noexcept;
 
-			void CreatePrescribedAttributesAgain();
+				static shared_ptr<deque<Signature>> Signatures();
 
-			Foo* _Foo;
-			int _Int = 0;
-			float _Float = 0;
-			std::string _String;
-			glm::vec4 _Vec4 = glm::vec4(0);
-			glm::mat4x4 _Mat4x4 = glm::mat4x4(0);
+				Foo* _Foo;
+				int _Int = 0;
+				float _Float = 0;
+				std::string _String;
+				glm::vec4 _Vec4 = glm::vec4(0);
+				glm::mat4x4 _Mat4x4 = glm::mat4x4(0);
 
-			Foo* _FooArray[3];
-			int _IntArray[3] = { 0, 1, 2 };
-			float _FloatArray[3] = { 0, 1, 2 };
-			std::string _StringArray[3] = {std::string("0"), std::string("1"), std::string("2")};
-			glm::vec4 _Vec4Array[3] = { glm::vec4(0), glm::vec4(1), glm::vec4(2)};
-			glm::mat4x4 _Mat4x4Array[3] = { glm::mat4x4(0), glm::mat4x4(1), glm::mat4x4(2) };
-		};
+				Foo* _FooArray[3];
+				int _IntArray[3] = { 0, 1, 2 };
+				float _FloatArray[3] = { 0, 1, 2 };
+				std::string _StringArray[3] = {std::string("0"), std::string("1"), std::string("2")};
+				glm::vec4 _Vec4Array[3] = { glm::vec4(0), glm::vec4(1), glm::vec4(2)};
+				glm::mat4x4 _Mat4x4Array[3] = { glm::mat4x4(0), glm::mat4x4(1), glm::mat4x4(2) };
+			};
+		
+		}
 	}
 }

@@ -15,17 +15,11 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="TestFiles">
+      <UniqueIdentifier>{ef3efef8-3032-40a5-bf17-b96f5ab5b126}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\FieaGameEngine\Empty.cpp">
-      <Filter>Test Classes\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\FieaGameEngine\EmptyChild.cpp">
-      <Filter>Test Classes\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\FieaGameEngine\Foo.cpp">
-      <Filter>Test Classes\Source</Filter>
-    </ClCompile>
     <ClCompile Include="AttributedChild.cpp">
       <Filter>Test Classes\Source</Filter>
     </ClCompile>
@@ -45,23 +39,91 @@
       <Filter>Tests</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="Empty.cpp">
+      <Filter>Test Classes\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="EmptyChild.cpp">
+      <Filter>Test Classes\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Foo.cpp">
+      <Filter>Test Classes\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="AttributedGrandChild.cpp">
+      <Filter>Test Classes\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ParseCoordinator.Test.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FieaGameEngine\TestParseHandler.cpp">
+      <Filter>Test Classes\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FieaGameEngine\IntTestHandler.cpp">
+      <Filter>Test Classes\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="AttributedBar.cpp">
+      <Filter>Test Classes\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Factory.Test.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.Test.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>Test Classes\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Actions.Test.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Events.Test.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="DogSubscriber.cpp">
+      <Filter>Test Classes\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\FieaGameEngine\EmptyChild.h">
-      <Filter>Test Classes\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\FieaGameEngine\Empty.h">
-      <Filter>Test Classes\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\FieaGameEngine\Foo.h">
-      <Filter>Test Classes\Headers</Filter>
-    </ClInclude>
     <ClInclude Include="AttributedChild.h">
       <Filter>Test Classes\Headers</Filter>
     </ClInclude>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Empty.h">
+      <Filter>Test Classes\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="EmptyChild.h">
+      <Filter>Test Classes\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Foo.h">
+      <Filter>Test Classes\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="AttributedGrandChild.h">
+      <Filter>Test Classes\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FieaGameEngine\IntTestHandler.h">
+      <Filter>Test Classes\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FieaGameEngine\TestParseHandler.h">
+      <Filter>Test Classes\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="AttributedBar.h">
+      <Filter>Test Classes\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ConcreteFactories.h">
+      <Filter>Test Classes\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>Test Classes\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="DogSubscriber.h">
+      <Filter>Test Classes\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="..\Resources\DragonConfig.json">
+      <Filter>TestFiles</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>

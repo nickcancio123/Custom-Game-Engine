@@ -16,10 +16,11 @@
 
 
 using namespace Fiea::GameEngine;
+using namespace Fiea::GameEngine::Test;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 
-namespace FieaGameEngineTest
+namespace Fiea::GameEngine::Test
 {
 	TEST_CLASS(ScopeTests)
 	{
@@ -460,12 +461,15 @@ namespace FieaGameEngineTest
 				Scope& S3 = S1.AppendScope("S3");
 				S3.Append("D1").PushBack(5.0f);
 
-				const Scope SCopy(S1);
+				const Scope* S1Ptr = &S1;
 
 				Scope* OutScopePtr = nullptr;
-				const Datum* FoundDatum = SCopy.Search("S3", &OutScopePtr);
+				const Datum* SearchedDatum = S1Ptr->Search("S3", &OutScopePtr);
+				Assert::IsNotNull(SearchedDatum);
 
-				Assert::AreEqual(*SCopy.Find("S3"), *FoundDatum);
+				Datum* FoundDatum = S1.Find("S3");
+				Assert::IsNotNull(FoundDatum);
+				Assert::AreEqual(*FoundDatum, *SearchedDatum);
 				Assert::AreEqual(S3, *OutScopePtr);
 			}
 

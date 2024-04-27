@@ -2,22 +2,26 @@
 
 #include "Scope.h"
 #include "Signature.h"
-#include <vector>
-
+#include <deque>
+#include <memory>
 
 
 namespace Fiea
 {
 	namespace GameEngine
 	{
+		using std::shared_ptr;
+		using std::deque;
+
 		class Attributed : public Scope
 		{
-		public:
+			RTTI_DECLARATIONS(Attributed, Scope);
 
+		public:
 
 			#pragma region === Constructors & Destructors ===
 
-			Attributed() = default;
+			Attributed(size_t TypeId);
 
 			/**
 			 * @brief Copy constructor: performs a deep copy of another attributed
@@ -61,12 +65,6 @@ namespace Fiea
 			#pragma endregion
 
 			/**
-			 * @brief Registers attribute signature list to attribute registry singleton. Necessarily done lazily.
-			 * Child classes must do this.
-			*/
-			virtual const std::vector<Signature>* RegisterAttributeSignatures() = 0;
-
-			/**
 			 * @brief Returns a new attributed that is a deep copy of this
 			 * @return The new attributed
 			*/
@@ -107,22 +105,15 @@ namespace Fiea
 		protected:
 
 			/**
-			 * @brief The signutures of attributes that come with this class.
-			*/
-			//std::vector<Signature> _PrescribedAttributeSignatures;
-			
-			/**
 			 * @brief The names of auxilliary attributes, guaranteed to be made. Is a container of names and not signatures, 
 			 * because no way of knowing what attribute type will be
 			*/
 			std::vector<std::string> _AuxilliaryAttributeNames;
 
-			bool _PrescribedAttributesCreated = false;
-
 			/**
 			 * @brief Appends datums based on prescribed attribute signatures
 			*/
-			void CreatePrescribedAttributes();
+			void CreatePrescribedAttributes(size_t TypeId);
 		};
 	}
 }

@@ -1,54 +1,29 @@
 #include "pch.h"
 #include "AttributedChild.h"
-#include "AttributeRegistry.h"
-
 
 using namespace Fiea::GameEngine;
+using namespace Fiea::GameEngine::Test;
 
 
-const std::vector<Signature>* AttributedChild::RegisterAttributeSignatures()
-{
-	AttributeRegistry* Registry = AttributeRegistry::GetInstance();
-	assert(Registry);
+RTTI_DEFINITIONS(AttributedChild);
 
-	return Registry->RegisterAttributeSignatures(AttributedChild::TypeIdClass(),
-		{
-			Signature("this", Datum::Type::POINTER, 1, 0),
 
-			//Signature("Foo", Datum::POINTER, 1, offsetof(AttributedChild, _Foo)),
-			//Signature("Int", Datum::INT, 1, offsetof(AttributedChild, _Int)),
-			//Signature("Float", Datum::FLOAT, 1, offsetof(AttributedChild, _Float)),
-			//Signature("String", Datum::STRING, 1, offsetof(AttributedChild, _String)),
-			//Signature("Vec4", Datum::VEC4, 1, offsetof(AttributedChild, _Vec4)),
-			//Signature("Mat4x4", Datum::MAT4X4, 1, offsetof(AttributedChild, _Mat4x4)),
-			//
-			//Signature("FooArray", Datum::POINTER, 3, offsetof(AttributedChild, _FooArray)),
-			//Signature("IntArray", Datum::INT, 3, offsetof(AttributedChild, _IntArray)),
-			//Signature("FloatArray", Datum::FLOAT, 3, offsetof(AttributedChild, _FloatArray)),
-			//Signature("StringArray", Datum::STRING, 3, offsetof(AttributedChild, _StringArray)),
-			//Signature("Vec4Array", Datum::VEC4, 3, offsetof(AttributedChild, _Vec4Array)),
-			//Signature("Mat4x4Array", Datum::MAT4X4, 3, offsetof(AttributedChild, _Mat4x4Array))
-		}
-	);
-}
-
-AttributedChild::AttributedChild()
+AttributedChild::AttributedChild(size_t TypeId)
+	: Attributed(TypeId)
 {
 	_Foo = new Foo(0);
 	_FooArray[0] = new Foo(0);
 	_FooArray[1] = new Foo(1);
 	_FooArray[2] = new Foo(2);
-
-	CreatePrescribedAttributes();
 }
 
 AttributedChild::AttributedChild(const AttributedChild& Other)
 	: Attributed(Other)
 {
-	_Foo = new Foo(0);
-	_FooArray[0] = new Foo(0);
-	_FooArray[1] = new Foo(1);
-	_FooArray[2] = new Foo(2);
+	_Foo = new Foo(*Other._Foo);
+	_FooArray[0] = new Foo(*Other._FooArray[0]);
+	_FooArray[1] = new Foo(*Other._FooArray[1]);
+	_FooArray[2] = new Foo(*Other._FooArray[2]);
 }
 
 AttributedChild::~AttributedChild()
@@ -115,7 +90,25 @@ AttributedChild& AttributedChild::operator=(AttributedChild&& Other) noexcept
 	return *this;
 }
 
-void AttributedChild::CreatePrescribedAttributesAgain()
+shared_ptr<deque<Signature>> AttributedChild::Signatures()
 {
-	CreatePrescribedAttributes();
+	shared_ptr<deque<Signature>> Sigs = std::make_shared<deque<Signature>>();
+
+	Sigs->push_back(Signature("this", Datum::POINTER, 1, 0));
+
+	Sigs->push_back(Signature("Foo", Datum::POINTER, 1, offsetof(AttributedChild, _Foo)));
+	Sigs->push_back(Signature("Int", Datum::INT, 1, offsetof(AttributedChild, _Int)));
+	Sigs->push_back(Signature("Float", Datum::FLOAT, 1, offsetof(AttributedChild, _Float)));
+	Sigs->push_back(Signature("String", Datum::STRING, 1, offsetof(AttributedChild, _String)));
+	Sigs->push_back(Signature("Vec4", Datum::VEC4, 1, offsetof(AttributedChild, _Vec4)));
+	Sigs->push_back(Signature("Mat4x4", Datum::MAT4X4, 1, offsetof(AttributedChild, _Mat4x4)));
+
+	Sigs->push_back(Signature("FooArray", Datum::POINTER, 3, offsetof(AttributedChild, _FooArray)));
+	Sigs->push_back(Signature("IntArray", Datum::INT, 3, offsetof(AttributedChild, _IntArray)));
+	Sigs->push_back(Signature("FloatArray", Datum::FLOAT, 3, offsetof(AttributedChild, _FloatArray)));
+	Sigs->push_back(Signature("StringArray", Datum::STRING, 3, offsetof(AttributedChild, _StringArray)));
+	Sigs->push_back(Signature("Vec4Array", Datum::VEC4, 3, offsetof(AttributedChild, _Vec4Array)));
+	Sigs->push_back(Signature("Mat4x4Array", Datum::MAT4X4, 3, offsetof(AttributedChild, _Mat4x4Array)));
+
+	return Sigs;
 }

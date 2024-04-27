@@ -148,7 +148,15 @@ namespace Fiea
 			 * @param ScopeIndex Out: The index within the datum the scope was found in. If not found, index is max unsigned int
 			 * @return The datum within which the scope was found in
 			*/
-			Datum* FindContainedScope(const Scope* ScopeToFind, unsigned int& ScopeIndex) const;
+			Datum* FindContainedScope(const Scope* ScopeToFind, unsigned int& ScopeIndex);
+
+			/**
+			 * @brief Recursively searches for a scope within this.
+			 * @param ScopeToFind The address of the scope we're looking for.
+			 * @param ScopeIndex Out: The index within the datum the scope was found in. If not found, index is max unsigned int
+			 * @return Const pointer to the datum within which the scope was found in
+			*/
+			const Datum* FindContainedScope(const Scope* ScopeToFind, unsigned int& ScopeIndex) const;
 
 			/**
 			 * @brief Finds specified scope within this scope and returns its name in out param. NOT RECURSIVE.
@@ -163,7 +171,14 @@ namespace Fiea
 			 * @param Name The key for desired datum
 			 * @return The datum mapped to given key. Returns nullptr if no such datum.
 			*/
-			Datum* Find(const std::string Name) const;
+			Datum* Find(const std::string Name);
+
+			/**
+			 * @brief Retrieves the datum, if exists, mapped to given name/key
+			 * @param Name The key for desired datum
+			 * @return Constant pointer to the datum mapped to given key. Returns nullptr if no such datum.
+			*/
+			const Datum* Find(const std::string Name) const; 
 
 			/**
 			 * @brief Finds the nearest scope-datum with given key in this scope or parents
@@ -193,7 +208,7 @@ namespace Fiea
 			/**
 			 * @brief Maps a name to a datum.
 			*/
-			std::unordered_map<std::string, Datum*> _NameToDatum;
+			std::unordered_map<std::string, Datum> _NameToDatum;
 
 			/**
 			 * @brief Stores names of datum in the order they were added to this scope.
