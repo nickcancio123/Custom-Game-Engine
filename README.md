@@ -2,7 +2,7 @@
 
 This project is a WORK-IN-PROGRESS graduate project at the Florida Interactive Entertainment Academy (FIEA). 
 
-It forms the interactive-data portion of a game engine, enabling a game developer to configure the behavior of and data contained by game objects in both C++ and JSON. 
+It forms the interactive-data portion of a game engine, enabling a game developer to configure the behavior of and data contained by game objects in both C++ and JSON through reflection. 
 
 NOTE: This project is being developed using Perforce, so this repo only contains snapshots of source from the original project.
 
